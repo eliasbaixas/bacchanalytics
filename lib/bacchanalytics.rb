@@ -2,14 +2,14 @@ module GoogleAnalyticsTrackingCode
 
   # Construct the new asynchronous version of the Google Analytics code.
   # http://code.google.com/apis/analytics/docs/tracking/asyncTracking.html
-  def google_analytics_tracking_code(web_property_id, domain_name)
+  def google_analytics_tracking_code(web_property_id, domain_name = nil)
 
     gatc = <<-SCRIPT
     <script type="text/javascript">
 
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', '#{web_property_id}']);
-    _gaq.push(['_setDomainName', '.#{domain_name}']);
+    #{"_gaq.push(['_setDomainName', '."+domain_name+"}']);" if domain_name}
     _gaq.push(['_trackPageview']);
 
     (function() {
@@ -34,7 +34,7 @@ class Bacchanalytics
   def initialize(app, options = {})
     @app = app
     @web_property_id = options[:web_property_id] || "UA-XXXXX-X"
-    @domain = options[:domain]
+    @domain = options[:domain] || nil
   end
 
   def call(env)
