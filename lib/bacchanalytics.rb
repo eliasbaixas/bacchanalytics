@@ -46,6 +46,7 @@ class Bacchanalytics
     # http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
     if !headers["Content-Type"].nil? && (headers["Content-Type"].include? "text/html")
       body = response.body
+      body = body.first if Array === body
       new_body = body.sub /<[hH][eE][aA][dD]\s*>/, "<head>\n\n#{google_analytics_tracking_code(@web_property_id, @domain)}"
       headers["Content-Length"] = new_body.length.to_s
       new_response = Rack::Response.new
